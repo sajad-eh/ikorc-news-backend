@@ -1,0 +1,39 @@
+import autoBind from "auto-bind";
+import ErrorResponse from "../utils/errorResponse.js";
+
+class Controller {
+  constructor() {
+    autoBind(this);
+    this.ErrorResponse = ErrorResponse;
+  }
+
+  validationParams = (schema) => (req, res, next) => {
+    const { error } = schema.validate(req.params, { abortEarly: false });
+    if (error) {
+      const messages = [];
+      error.details.forEach((err) => messages.push(err.message));
+      next(new ErrorResponse(400, messages));
+    }
+    next();
+  };
+
+  validationBody = (schema) => (req, res, next) => {
+    const { error } = schema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const messages = [];
+      error.details.forEach((err) => messages.push(err.message));
+      next(new ErrorResponse(400, messages));
+    }
+    next();
+  };
+
+  response({ res, status = "ok", message, statusCode = 200, data = null }) {
+    res.status(statusCode).json({
+      status,
+      message,
+      data,
+    }).end;
+  }
+}
+
+export { Controller };

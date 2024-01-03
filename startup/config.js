@@ -20,7 +20,7 @@ export default function (app, express) {
       store: redisStore,
       resave: false, // required: force lightweight session keep alive (touch)
       saveUninitialized: false, // recommended: only save session when data exists
-      secret: process.env.SESS_KEY,
+      secret: process.env.SESSION_SECRET,
       name: "sessionId",
       cookie: {
         secure: process.env.NODE_ENV === "production" ? true : false,
