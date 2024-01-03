@@ -1,0 +1,29 @@
+{
+  "name": "ikorc-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "DEBUG=app:main* export NODE_ENV=development && nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sajad ehsanian",
+  "type": "module",
+  "license": "ISC",
+  "dependencies": {
+    "auto-bind": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "connect-redis": "^7.1.0",
+    "crypto-random-string": "^5.0.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "express-session": "^1.17.3",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.0.3",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.8",
+    "redis": "^4.6.12",
+    "winston": "^3.11.0"
+  }
+}
