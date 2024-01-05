@@ -11,7 +11,7 @@ export default new (class AuthController extends Controller {
     this.response({
       res,
       statusCode: 201,
-      message: "خبر جدید ثبت شد",
+      message: "News was create successful",
       data: newsCreate,
     });
   }
@@ -19,12 +19,12 @@ export default new (class AuthController extends Controller {
   async getAllNews(req, res, next) {
     const newsFind = await this.News.find();
     if (!newsFind) {
-      return next(new this.ErrorResponse(404, "خبر یاقت نشد"));
+      return next(new this.ErrorResponse(404, "Not found"));
     }
     this.response({
       res,
       statusCode: 200,
-      message: "خبر ارسال شد",
+      message: "News get all successful",
       data: {
         length: newsFind.length,
         news: newsFind.map((result) =>
@@ -37,12 +37,12 @@ export default new (class AuthController extends Controller {
   async getNewsById(req, res, next) {
     const newsFind = await this.News.findById(req.params.id);
     if (!newsFind) {
-      return next(new this.ErrorResponse(404, "خبر یاقت نشد"));
+      return next(new this.ErrorResponse(404, "Not found"));
     }
     this.response({
       res,
       statusCode: 200,
-      message: "خبر ارسال شد",
+      message: "News get successful",
       data: _.pick(newsFind, ["_id", "title", "images", "description", "author", "assortment", "newsDate"]),
     });
   }
@@ -54,12 +54,12 @@ export default new (class AuthController extends Controller {
       { new: true, runValidators: true }
     );
     if (!updatedNews) {
-      return next(new this.ErrorResponse(404, "خبر یاقت نشد"));
+      return next(new this.ErrorResponse(404, "Not found"));
     }
     this.response({
       res,
       statusCode: 200,
-      message: "خبر آپدیت شد",
+      message: "News was updated successful",
       data: updatedNews,
     });
   }
@@ -67,12 +67,12 @@ export default new (class AuthController extends Controller {
   async deleteNewsById(req, res, next) {
     const deletedNews = await this.News.findByIdAndDelete(req.params.id);
     if (!deletedNews) {
-      return next(new this.ErrorResponse(404, "خبر یاقت نشد"));
+      return next(new this.ErrorResponse(404, "Not found"));
     }
     this.response({
       res,
       statusCode: 200,
-      message: "خبر پاک شد",
+      message: "News deleted was successful",
       data: deletedNews,
     });
   }
