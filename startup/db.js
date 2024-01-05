@@ -9,7 +9,7 @@ redisClient.connect().catch((error) => {
 });
 // Passing parameters separately
 mongoose
-  .connect(process.env.CONN_STR)
+  .connect(process.env.LOCAL_CONN_STR)
   .then((result) => {
     // debug(result)
     debug("Connection has been established successfully.");

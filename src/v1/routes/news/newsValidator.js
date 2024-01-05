@@ -7,6 +7,7 @@ export default new (class NewsValidator {
       description: Joi.string().required(),
       author: Joi.string(),
       assortment: Joi.string(),
+      newsDate: Joi.date(),
     });
     return schema;
   }
@@ -22,9 +23,9 @@ export default new (class NewsValidator {
     const schema = Joi.object().keys({
       title: Joi.string().required(),
       description: Joi.string().required(),
-      author: Joi.string(),
-      assortment: Joi.string(),
-      newsDate: Joi.date(),
+      author: Joi.string().required(),
+      assortment: Joi.string().required(),
+      newsDate: Joi.date().required(),
     });
     return schema;
   }

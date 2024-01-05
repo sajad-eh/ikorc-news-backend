@@ -58,6 +58,7 @@ export default new (class AuthController extends Controller {
     }
     this.response({
       res,
+      status: "updated",
       statusCode: 200,
       message: "News was updated successful",
       data: updatedNews,
@@ -71,6 +72,7 @@ export default new (class AuthController extends Controller {
     }
     this.response({
       res,
+      status: "deleted",
       statusCode: 200,
       message: "News deleted was successful",
       data: deletedNews,
