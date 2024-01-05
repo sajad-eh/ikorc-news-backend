@@ -10,7 +10,6 @@ import errorHandler from "./src/v1/middleware/errorHandler.js";
 
 import module from "./startup/config.js";
 module(app, express);
-debug(1)
 import "./startup/db.js";
 import logging from "./startup/logging.js";
 logging();

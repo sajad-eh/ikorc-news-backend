@@ -1,10 +1,12 @@
 import autoBind from "auto-bind";
 import ErrorResponse from "../utils/errorResponse.js";
+import News from '../models/News.js';
 
 class Controller {
   constructor() {
     autoBind(this);
     this.ErrorResponse = ErrorResponse;
+    this.News = News
   }
 
   validationParams = (schema) => (req, res, next) => {
