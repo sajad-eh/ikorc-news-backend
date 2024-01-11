@@ -1,12 +1,13 @@
 import autoBind from "auto-bind";
+import url from "node:url";
+import path from "path";
 import ErrorResponse from "../utils/errorResponse.js";
-import News from '../models/News.js';
-
+import News from "../models/News.js";
 class Controller {
   constructor() {
     autoBind(this);
     this.ErrorResponse = ErrorResponse;
-    this.News = News
+    this.News = News;
   }
 
   validationParams = (schema) => (req, res, next) => {
@@ -35,6 +36,15 @@ class Controller {
       message,
       data,
     }).end;
+  }
+
+  createUrlImage(req, paths, file) {
+    const baseUrl = url.format({
+      protocol: req.protocol,
+      host: req.get("host"),
+      pathname: paths,
+    });
+    return path.join(baseUrl, file);
   }
 }
 

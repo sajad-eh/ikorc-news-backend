@@ -2,9 +2,11 @@ import express from "express";
 const newsRouter = express.Router();
 import NewsController from "./newsController.js";
 import NewsValidator from "./newsValidator.js";
+import { upload } from "../../utils/multer.js";
 
 newsRouter.post(
   "/",
+  upload.single("cover"),
   NewsController.validationBody(NewsValidator.bodyCreateNews()),
   NewsController.createNews
 );

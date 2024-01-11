@@ -1,5 +1,6 @@
 import winston from "winston";
 import Debug from "debug";
+import ErrorResponse from "../utils/errorResponse.js";
 const debug = Debug("app:err");
 
 const devError = (res, error) => {
@@ -28,6 +29,14 @@ const prodError = (res, error) => {
   }
 };
 
+const limitFileSizeHandler = (err) => {
+  if (err.code == "LIMIT_FILE_SIZE") {
+    return new ErrorResponse(413, "حجم تصویر نباید بیشتر از 10 مگابایت باشد");
+  } else if (err.code == "error file type") {
+    return new ErrorResponse(415, "فرمت تصویر باید jpeg/jpg/png/webp باشد");
+  }
+};
+
 export default function errorHandler(err, req, res, next) {
   let error = { ...err };
   error.message = err.message;
@@ -37,9 +46,10 @@ export default function errorHandler(err, req, res, next) {
 
   winston.error(error.message, error);
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV == "development") {
     devError(res, error);
-  } else if (process.env.NODE_ENV === "production") {
+  } else if (process.env.NODE_ENV == "production") {
+    if (error.name == "MulterError") error = limitFileSizeHandler(error);
     prodError(res, error);
   }
 }

@@ -2,11 +2,23 @@ import RedisStore from "connect-redis";
 import session from "express-session";
 import morgan from "morgan";
 import { redisClient } from "./db.js";
+import setHeaders from "../src/v1/middleware/setHeaders.js";
 
 export default function (app, express) {
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
+  // BodyParser
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+  app.use(express.json({ limit: "50mb" }));
+
+  // CORS Policy Definitions
+  app.use(setHeaders);
+
+  // Static Folder
   app.use(express.static("public"));
+
+  // Middleware
+  if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+  }
 
   // Initialize store.
   const redisStore = new RedisStore({
@@ -29,9 +41,4 @@ export default function (app, express) {
       },
     })
   );
-
-  // Middleware
-  if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
-  }
 }

@@ -3,13 +3,15 @@ import { createClient } from "redis";
 import Debug from "debug";
 const debug = Debug("app:main");
 
+// redis connection
 const redisClient = createClient({ port: 6379, host: "localhost" });
 redisClient.connect().catch((error) => {
   debug("Redis client error", error);
 });
-// Passing parameters separately
+
+// Database connection
 mongoose
-  .connect(process.env.CONN_STR)
+  .connect(process.env.LOCAL_CONN_STR)
   .then((result) => {
     // debug(result)
     debug("Connection has been established successfully.");
