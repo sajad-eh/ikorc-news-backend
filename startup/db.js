@@ -11,7 +11,7 @@ redisClient.connect().catch((error) => {
 
 // Database connection
 mongoose
-  .connect(process.env.LOCAL_CONN_STR)
+  .connect(process.env.CONN_STR)
   .then((result) => {
     // debug(result)
     debug("Connection has been established successfully.");

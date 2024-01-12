@@ -4,32 +4,23 @@ import NewsController from "./newsController.js";
 import NewsValidator from "./newsValidator.js";
 import { upload } from "../../utils/multer.js";
 
-newsRouter.post(
-  "/",
-  upload.single("cover"),
-  NewsController.validationBody(NewsValidator.bodyCreateNews()),
-  NewsController.createNews
-);
+newsRouter
+  .route("/")
+  .post(
+    upload.single("cover"),
+    NewsController.validationBody(NewsValidator.bodyCreateNews()),
+    NewsController.createNews
+  )
+  .get(NewsController.getAllNews);
 
-newsRouter.get("/", NewsController.getAllNews);
-
-newsRouter.get(
-  "/:id",
-  NewsController.validationParams(NewsValidator.paramsCheckId()),
-  NewsController.getNewsById
-);
-
-newsRouter.put(
-  "/:id",
-  NewsController.validationParams(NewsValidator.paramsCheckId()),
-  NewsController.validationBody(NewsValidator.bodyUpdateNewsById()),
-  NewsController.updateNewsById
-);
-
-newsRouter.delete(
-  "/:id",
-  NewsController.validationParams(NewsValidator.paramsCheckId()),
-  NewsController.deleteNewsById
-);
+newsRouter
+  .route("/:id")
+  .get(NewsController.validationParams(NewsValidator.paramsCheckId()), NewsController.getNewsById)
+  .put(
+    NewsController.validationParams(NewsValidator.paramsCheckId()),
+    NewsController.validationBody(NewsValidator.bodyUpdateNewsById()),
+    NewsController.updateNewsById
+  )
+  .delete(NewsController.validationParams(NewsValidator.paramsCheckId()), NewsController.deleteNewsById);
 
 export default newsRouter;

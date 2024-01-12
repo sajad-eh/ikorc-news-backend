@@ -34,8 +34,7 @@ export default new (class AuthController extends Controller {
       newsCreate = await this.News.create(_.pick(req.body, ["title", "description", "author", "newsDate"]));
     }
     if (newsCreate.cover) {
-      const imageUrl = this.createUrlImage(req, path.join("news", "covers"), newsCreate.cover);
-      newsCreate.cover = imageUrl;
+      newsCreate.cover = this.createUrlImage(req, path.join("news", "covers"), newsCreate.cover);
     } else {
       newsCreate.cover = null;
     }
@@ -50,18 +49,24 @@ export default new (class AuthController extends Controller {
 
   async getAllNews(req, res, next) {
     const newsFind = await this.News.find();
-    if (!newsFind) {
+    if (!newsFind.length) {
       return next(new this.ErrorResponse(404, "Not found"));
     }
+
     this.response({
       res,
       statusCode: 200,
       message: "News get all successful",
       data: {
         length: newsFind.length,
-        news: newsFind.map((result) =>
-          _.pick(result, ["_id", "title", "images", "description", "author", "newsDate"])
-        ),
+        news: newsFind.map((result) => {
+          if (result.cover) {
+            result.cover = this.createUrlImage(req, path.join("news", "covers"), result.cover);
+          } else {
+            result.cover = null;
+          }
+          return _.pick(result, ["_id", "title", "cover", "description", "author", "newsDate"]);
+        }),
       },
     });
   }
@@ -72,8 +77,7 @@ export default new (class AuthController extends Controller {
       return next(new this.ErrorResponse(404, "Not found"));
     }
     if (newsFind.cover) {
-      const imageUrl = this.createUrlImage(req, path.join("news", "covers"), newsFind.cover);
-      newsFind.cover = imageUrl;
+      newsFind.cover = this.createUrlImage(req, path.join("news", "covers"), newsFind.cover);
     } else {
       newsFind.cover = null;
     }
@@ -95,6 +99,7 @@ export default new (class AuthController extends Controller {
     if (!updatedNews) {
       return next(new this.ErrorResponse(404, "Not found"));
     }
+
     this.response({
       res,
       status: "updated",
@@ -109,6 +114,8 @@ export default new (class AuthController extends Controller {
     if (!deletedNews) {
       return next(new this.ErrorResponse(404, "Not found"));
     }
+    fse.remove(path.join(process.env.UPLOAD_DIR, "news", "covers", deletedNews.cover));
+
     this.response({
       res,
       status: "deleted",
