@@ -39,7 +39,7 @@ class Controller {
   }
 
   returnBaseUrl(req) {
-    return = url.format({
+    return url.format({
       protocol: req.protocol,
       host: req.get("host"),
     });
