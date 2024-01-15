@@ -29,6 +29,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.8",
     "redis": "^4.6.12",
+    "url-join": "^5.0.0",
     "winston": "^3.11.0"
   },
   "devDependencies": {
