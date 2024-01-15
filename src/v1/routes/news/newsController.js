@@ -5,6 +5,7 @@ const debug = Debug("app:main");
 import fse from "fs-extra/esm";
 import path from "path";
 import os from "os";
+import urlJoin from "url-join";
 
 export default new (class AuthController extends Controller {
   async createNews(req, res, next) {
@@ -34,7 +35,7 @@ export default new (class AuthController extends Controller {
       newsCreate = await this.News.create(_.pick(req.body, ["title", "description", "author", "newsDate"]));
     }
     if (newsCreate.cover) {
-      newsCreate.cover = this.createUrlImage(req, path.join("news", "covers"), newsCreate.cover);
+      newsCreate.cover = urlJoin(this.returnBaseUrl(req), "news", "covers", newsCreate.cover);
     } else {
       newsCreate.cover = null;
     }
@@ -61,7 +62,7 @@ export default new (class AuthController extends Controller {
         length: newsFind.length,
         news: newsFind.map((result) => {
           if (result.cover) {
-            result.cover = this.createUrlImage(req, path.join("news", "covers"), result.cover);
+            result.cover = urlJoin(this.returnBaseUrl(req), "news", "covers", result.cover);
           } else {
             result.cover = null;
           }
@@ -77,7 +78,7 @@ export default new (class AuthController extends Controller {
       return next(new this.ErrorResponse(404, "Not found"));
     }
     if (newsFind.cover) {
-      newsFind.cover = this.createUrlImage(req, path.join("news", "covers"), newsFind.cover);
+      newsFind.cover = urlJoin(this.returnBaseUrl(req), "news", "covers", newsFind.cover);
     } else {
       newsFind.cover = null;
     }
