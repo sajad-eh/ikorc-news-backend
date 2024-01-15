@@ -38,13 +38,11 @@ class Controller {
     }).end;
   }
 
-  createUrlImage(req, paths, file) {
-    const baseUrl = url.format({
+  returnBaseUrl(req) {
+    return = url.format({
       protocol: req.protocol,
       host: req.get("host"),
-      pathname: paths,
     });
-    return path.join(baseUrl, file);
   }
 }
 
