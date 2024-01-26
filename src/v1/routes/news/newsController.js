@@ -1,10 +1,12 @@
 import { Controller } from "../controller.js";
-import _ from "lodash";
 import Debug from "debug";
 const debug = Debug("app:main");
 import fse from "fs-extra/esm";
 import path from "path";
 import os from "os";
+import urlJoin from "url-join";
+import _ from "lodash";
+import renameKeys from "rename-keys";
 
 export default new (class AuthController extends Controller {
   async createNews(req, res, next) {
@@ -34,9 +36,7 @@ export default new (class AuthController extends Controller {
       newsCreate = await this.News.create(_.pick(req.body, ["title", "description", "author", "newsDate"]));
     }
     if (newsCreate.cover) {
-      newsCreate.cover = this.createUrlImage(req, path.join("news", "covers"), newsCreate.cover);
-    } else {
-      newsCreate.cover = null;
+      newsCreate.cover = urlJoin(this.returnBaseUrl(req), "news", "covers", newsCreate.cover);
     }
 
     this.response({
@@ -48,27 +48,60 @@ export default new (class AuthController extends Controller {
   }
 
   async getAllNews(req, res, next) {
-    const newsFind = await this.News.find();
-    if (!newsFind.length) {
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 10;
+    const offset = (page - 1) * limit;
+    const sort = req.query.sort || "-createdAt";
+    let select;
+    if (req.query.fields) {
+      select = req.query.fields.split(",").join(" ");
+    } else {
+      select = "-__v";
+    }
+
+    const condition = {};
+    const query = _.pick(req.query, ["title", "description", "author", "newsDate", "views"]);
+    for (let [key, value] of Object.entries(query)) {
+      let changeValue;
+      if (value instanceof Object) {
+        changeValue = renameKeys(value, function (key) {
+          return `$${key}`;
+        });
+      }
+      if (key == "newsDate" || key == "views") {
+        condition[key] = changeValue || value;
+      } else {
+        condition[key] = { $regex: new RegExp(value), $options: "i" };
+      }
+    }
+
+    const newsFind = await this.News.paginate(condition, {
+      page,
+      limit,
+      offset,
+      sort,
+      select,
+    });
+
+    if (!newsFind.docs.length) {
       return next(new this.ErrorResponse(404, "Not found"));
     }
 
-    this.response({
-      res,
-      statusCode: 200,
-      message: "News get all successful",
-      data: {
-        length: newsFind.length,
-        news: newsFind.map((result) => {
-          if (result.cover) {
-            result.cover = this.createUrlImage(req, path.join("news", "covers"), result.cover);
-          } else {
-            result.cover = null;
-          }
-          return _.pick(result, ["_id", "title", "cover", "description", "author", "newsDate"]);
-        }),
-      },
-    });
+    newsFind.docs.map((result) => {
+      if (result.cover) {
+        result.cover = urlJoin(this.returnBaseUrl(req), "news", "covers", result.cover);
+      }
+      return;
+    }),
+      this.response({
+        res,
+        statusCode: 200,
+        message: "News get all successful",
+        data: {
+          length: newsFind.length,
+          news: newsFind,
+        },
+      });
   }
 
   async getNewsById(req, res, next) {
@@ -77,9 +110,7 @@ export default new (class AuthController extends Controller {
       return next(new this.ErrorResponse(404, "Not found"));
     }
     if (newsFind.cover) {
-      newsFind.cover = this.createUrlImage(req, path.join("news", "covers"), newsFind.cover);
-    } else {
-      newsFind.cover = null;
+      newsFind.cover = urlJoin(this.returnBaseUrl(req), "news", "covers", newsFind.cover);
     }
 
     this.response({

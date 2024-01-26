@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import paginate from "mongoose-paginate-v2";
 
 const newsSchema = new mongoose.Schema(
   {
@@ -10,7 +11,7 @@ const newsSchema = new mongoose.Schema(
     },
     cover: {
       type: String,
-      required: false,
+      default: null,
     },
     description: {
       type: String,
@@ -40,6 +41,8 @@ const newsSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+newsSchema.plugin(paginate);
 
 const News = mongoose.model("News", newsSchema);
 

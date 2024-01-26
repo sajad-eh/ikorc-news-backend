@@ -10,15 +10,17 @@ redisClient.connect().catch((error) => {
 });
 
 // Database connection
-mongoose
-  .connect(process.env.CONN_STR)
-  .then((result) => {
-    // debug(result)
-    debug("Connection has been established successfully.");
-  })
-  .catch((err) => {
-    debug("Unable to connect to the database", err);
-  });
+mongoose.connect(process.env.CONN_STR);
+mongoose.connection.on("connected", (result) => {
+  // debug(result);
+  debug("The connection to the database was successfully established.");
+});
+mongoose.connection.on("error", (err) => {
+  debug("Unable to connect to the database: ", err);
+});
+mongoose.connection.on("disconnected", () => {
+  debug("The connection to the database was lost.");
+});
 
 export default mongoose;
 export { redisClient };

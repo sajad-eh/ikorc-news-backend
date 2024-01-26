@@ -1,6 +1,5 @@
 import autoBind from "auto-bind";
 import url from "node:url";
-import path from "path";
 import ErrorResponse from "../utils/errorResponse.js";
 import News from "../models/News.js";
 class Controller {
@@ -38,13 +37,11 @@ class Controller {
     }).end;
   }
 
-  createUrlImage(req, paths, file) {
-    const baseUrl = url.format({
+  returnBaseUrl(req) {
+    return url.format({
       protocol: req.protocol,
       host: req.get("host"),
-      pathname: paths,
     });
-    return path.join(baseUrl, file);
   }
 }
 

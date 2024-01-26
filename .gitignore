@@ -6,7 +6,9 @@ logs
 *.log
 
 # Ignore the build directory
-/dist
+/public
 
 # The file containing environment variables
 .env
+
+

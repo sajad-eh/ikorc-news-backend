@@ -2,15 +2,18 @@ import RedisStore from "connect-redis";
 import session from "express-session";
 import morgan from "morgan";
 import { redisClient } from "./db.js";
-import setHeaders from "../src/v1/middleware/setHeaders.js";
+import helmet from "helmet";
+import hpp from "hpp";
 
 export default function (app, express) {
   // BodyParser
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));
-  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
+
+  app.use(hpp());
 
   // CORS Policy Definitions
-  app.use(setHeaders);
+  app.use(helmet());
 
   // Static Folder
   app.use(express.static("public"));
