@@ -13,7 +13,7 @@ export default function (app, express) {
   app.use(hpp());
 
   // CORS Policy Definitions
-  app.use(helmet());
+  app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
   // Static Folder
   app.use(express.static("public"));
