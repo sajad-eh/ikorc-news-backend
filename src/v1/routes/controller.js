@@ -2,11 +2,17 @@ import autoBind from "auto-bind";
 import url from "node:url";
 import ErrorResponse from "../utils/errorResponse.js";
 import News from "../models/News.js";
+import User from "../models/user.js";
+import UserVerification from "../models/userVerification.js";
+import ForgetPassword from "../models/forgetPassword.js";
 class Controller {
   constructor() {
     autoBind(this);
     this.ErrorResponse = ErrorResponse;
     this.News = News;
+    this.User = User;
+    this.UserVerification = UserVerification;
+    this.ForgetPassword = ForgetPassword;
   }
 
   validationParams = (schema) => (req, res, next) => {

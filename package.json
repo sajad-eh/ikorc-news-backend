@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "DEBUG=app:main* export NODE_ENV=development && nodemon app",
-    "pro": "DEBUG=app:main* export NODE_ENV=production && nodemon app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pro": "DEBUG=app:main* export NODE_ENV=production && nodemon app"
   },
   "author": "sajad ehsanian",
   "type": "module",
