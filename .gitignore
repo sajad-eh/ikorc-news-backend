@@ -9,6 +9,6 @@ logs
 /public
 
 # The file containing environment variables
-# .env
+.env
 
 
