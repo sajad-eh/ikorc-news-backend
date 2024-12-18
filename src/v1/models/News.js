@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
+// Model News
 const newsSchema = new mongoose.Schema(
   {
     title: {
@@ -27,7 +28,7 @@ const newsSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    views: {
+    viewsCounter: {
       type: Number,
       default: 0,
     },
@@ -35,12 +36,15 @@ const newsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // createdBy,
-    // category: [{ref: 'category', title}],
-    // comments: [{ user: {ref: 'user'}, comment}]
+    category: { type: Schema.Types.ObjectId, required: true, ref: "category" },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
+
+newsSchema.pre(/^find/, function (next) {
+  this.select("-__v");
+  next();
+});
 
 newsSchema.plugin(paginate);
 

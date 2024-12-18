@@ -27,10 +27,9 @@ export default new (class AuthValidator {
     return schema;
   }
 
-  bodyVerifyOTP() {
-    // TODO regex
+  bodyVerifyOTAC() {
     const schema = Joi.object().keys({
-      verificationKey: Joi.number().integer().required(),
+      authorizationCode: Joi.string().regex(/^[0-9]{6}$/),
     });
     return schema;
   }
@@ -46,6 +45,17 @@ export default new (class AuthValidator {
         .min(8, "utf-8")
         .max(60, "utf-8")
         .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+        .required(),
+    });
+    return schema;
+  }
+
+  bodyLoginWithOTAC() {
+    const schema = Joi.object().keys({
+      email: Joi.string()
+        .min(5, "utf-8")
+        .max(60, "utf-8")
+        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
         .required(),
     });
     return schema;

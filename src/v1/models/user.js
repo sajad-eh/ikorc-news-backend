@@ -37,9 +37,19 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
+
+userSchema.pre(/^find/, function (next) {
+  this.select("-__v");
+  next();
+});
 
 userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 12);

@@ -3,10 +3,11 @@ import Joi from "joi";
 export default new (class NewsValidator {
   bodyCreateNews() {
     const schema = Joi.object().keys({
-      title: Joi.string().required().messages({ "any.required": " عنوان خبر الزامی می باشد" }),
-      description: Joi.string().required().messages({ "any.required": " توضیحات خبر الزامی می باشد" }),
-      author: Joi.string(),
+      title: Joi.string().required(),
+      description: Joi.string().required(),
+      author: Joi.string().required(),
       newsDate: Joi.date(),
+      category: Joi.string().required(),
     });
     return schema;
   }
@@ -20,10 +21,18 @@ export default new (class NewsValidator {
 
   bodyUpdateNewsById() {
     const schema = Joi.object().keys({
-      title: Joi.string().required().messages({ "any.required": " عنوان خبر الزامی می باشد" }),
-      description: Joi.string().required().messages({ "any.required": " توضیحات خبر الزامی می باشد" }),
-      author: Joi.string().required().messages({ "any.required": " نویسنده الزامی می باشد" }),
-      newsDate: Joi.date().required().messages({ "any.required": " تاریخ خبر الزامی می باشد" }),
+      title: Joi.string().required(),
+      description: Joi.string().required(),
+      author: Joi.string().required(),
+      newsDate: Joi.date(),
+      category: Joi.string().required(),
+    });
+    return schema;
+  }
+
+  paramsCheckNewsId() {
+    const schema = Joi.object().keys({
+      newsId: Joi.string().regex(/^[0-9a-fA-F]{24}$/),
     });
     return schema;
   }

@@ -1,4 +1,4 @@
-import RedisStore from "connect-redis";
+import { RedisStore } from "connect-redis";
 import session from "express-session";
 import morgan from "morgan";
 import { redisClient } from "./db.js";
@@ -38,6 +38,8 @@ export default function (app, express) {
       secret: process.env.SESSION_SECRET,
       name: "sessionId",
       cookie: {
+        expires: new Date(Date.now() + 600 * 1000),
+        maxAge: 600 * 1000,
         secure: process.env.NODE_ENV === "production" ? true : false,
         httpOnly: true, // if true: prevents client side JS from reading the cookie
         sameSite: "strict",

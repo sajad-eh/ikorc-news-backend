@@ -10,7 +10,7 @@ redisClient.connect().catch((error) => {
 });
 
 // Database connection
-mongoose.connect(process.env.CONN_STR);
+mongoose.connect(process.env.LOCAL_CONN_STR);
 mongoose.connection.on("connected", (result) => {
   // debug(result);
   debug("The connection to the database was successfully established.");
