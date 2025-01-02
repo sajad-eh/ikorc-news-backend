@@ -12,7 +12,7 @@ authRouter
   .post(AuthController.validationBody(AuthValidator.bodyLoginValidator()), AuthController.loginWithPassword);
 
 authRouter.post(
-  "/login-with-otac",
+  "/login/otac",
   AuthController.validationBody(AuthValidator.bodyLoginWithOTAC()),
   AuthController.loginWithOTAC
 );
@@ -20,7 +20,7 @@ authRouter.post(
 authRouter.route("/logout").get(AuthController.logout);
 
 authRouter
-  .route("/verify-otac/:userId")
+  .route("/verify/otac/:userId")
   .post(
     AuthController.validationParams(AuthValidator.paramsCheckId()),
     AuthController.validationBody(AuthValidator.bodyVerifyOTAC()),
@@ -28,7 +28,7 @@ authRouter
   );
 
 authRouter
-  .route("/verify-user-with-otac/:userId")
+  .route("/user/verify/otac/:userId")
   .post(
     AuthController.validationParams(AuthValidator.paramsCheckId()),
     AuthController.validationBody(AuthValidator.bodyVerifyOTAC()),
@@ -36,15 +36,15 @@ authRouter
   );
 
 authRouter
-  .route("/resend-otac/:userId")
+  .route("/resend/otac/:userId")
   .get(AuthController.validationParams(AuthValidator.paramsCheckId()), AuthController.resendOTAC);
 
 authRouter
-  .route("/forget-password")
+  .route("/password/forget")
   .post(AuthController.validationBody(AuthValidator.bodyForgetPassword()), AuthController.forgetPassword);
 
 authRouter
-  .route("/reset-password/:token")
+  .route("/password/reset/:token")
   .patch(
     AuthController.validationParams(AuthValidator.paramsCheckToken()),
     AuthController.validationBody(AuthValidator.bodyResetPassword()),

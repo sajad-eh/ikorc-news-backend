@@ -4,7 +4,7 @@ import Debug from "debug";
 const debug = Debug("app:main");
 
 export default new (class UserController extends Controller {
-  async dashboard(req, res, next) {
+  async me(req, res, next) {
     const user = await this.User.findById(req.session.user._id);
 
     this.response({

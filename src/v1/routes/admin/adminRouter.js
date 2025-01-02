@@ -4,11 +4,11 @@ import AdminController from "./adminController.js";
 import AdminValidator from "./adminValidator.js";
 
 adminRouter
-  .route("/publish-news/:action/:newsId")
+  .route("/news/publish/:action/:newsId")
   .get(AdminController.validationParams(AdminValidator.paramsPublishNews()), AdminController.publishNews);
 
 adminRouter
-  .route("/verify-otac-news/:action/:newsId")
+  .route("/news/verify/otac/:action/:newsId")
   .post(
     AdminController.validationParams(AdminValidator.paramsPublishNews()),
     AdminController.validationBody(AdminValidator.bodyVerifyOTAC()),
@@ -16,7 +16,7 @@ adminRouter
   );
 
 adminRouter
-  .route("/resend-otac-news/:action/:newsId")
+  .route("/news/resend/otac/:action/:newsId")
   .get(AdminController.validationParams(AdminValidator.paramsPublishNews()), AdminController.resendOTAC);
 
 export default adminRouter;

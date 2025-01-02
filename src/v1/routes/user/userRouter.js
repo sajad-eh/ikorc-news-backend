@@ -3,14 +3,14 @@ const userRouter = express.Router();
 import UserController from "./userController.js";
 import UserValidator from "./userValidator.js";
 
-userRouter.route("/dashboard").get(UserController.dashboard);
+userRouter.route("/me").get(UserController.me);
 
 userRouter
-  .route("/update-user")
+  .route("/update")
   .patch(UserController.validationBody(UserValidator.bodyUpdateUser()), UserController.updateUser);
 
 userRouter
-  .route("/update-password")
+  .route("/password/update")
   .patch(UserController.validationBody(UserValidator.bodyUpdatePassword()), UserController.updatePassword);
 
 export default userRouter;

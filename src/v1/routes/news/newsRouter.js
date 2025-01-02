@@ -42,7 +42,7 @@ newsRouter
   );
 
 newsRouter
-  .route("/update-cover/:newsId")
+  .route("/cover/update/:newsId")
   .patch(
     isLoggined,
     isAdmin,
