@@ -56,7 +56,7 @@ export default new (class AuthController extends Controller {
     if (userFind.isActive === false) {
       return next(new this.ErrorResponse(401, "User is not active"));
     }
-    req.session.user = userFind;
+    req.session.user = _.pick(userFind, ["id", "firstName", "lastName", "email"]);
 
     this.response({
       res,
@@ -125,7 +125,7 @@ export default new (class AuthController extends Controller {
     }
     const user = await this.User.findById(userId);
     await this.UserAuthorization.findByIdAndDelete(codeFind._id);
-    req.session.user = user;
+    req.session.user = _.pick(user, ["id", "firstName", "lastName", "email"]);
 
     this.response({
       res,
@@ -158,7 +158,7 @@ export default new (class AuthController extends Controller {
       { new: true, runValidators: true }
     );
     await this.UserAuthorization.findByIdAndDelete(codeFind._id);
-    req.session.user = user;
+    req.session.user = _.pick(user, ["id", "firstName", "lastName", "email"]);
 
     this.response({
       res,
