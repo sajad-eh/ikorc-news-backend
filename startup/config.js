@@ -16,7 +16,7 @@ export default function (app, express) {
   app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
   // Static Folder
-  app.use(express.static("public"));
+  app.use("/public", express.static("public"));
 
   // Middleware
   if (process.env.NODE_ENV === "development") {
